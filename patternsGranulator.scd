@@ -11,8 +11,9 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
 		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
 		*MouseX.kr(f.value,
-			(((BufFrames.kr(bufnum))-(f.value))
-				*mouseXScale)+(f.value))
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)
 	);
 	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
 	var env = EnvGen.ar(Env.sine(sustain,amp2),
@@ -28,11 +29,13 @@ SynthDef(\gabWide1,{|out, amp=0.01, freq=440, sustain=0.01, pan, width=0.5, bufn
 	var fadeT = width*sustain*0.5;
 	var snd = FSinOsc.ar(freq);
 	var trig =  Blip.kr(trigs,1,80);
+	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
 	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
 		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
-		*MouseX.kr((mouseXStart)*(BufFrames.kr(bufnum)),
-			(((BufFrames.kr(bufnum))-((mouseXStart)*(BufFrames.kr(bufnum))))
-				*mouseXScale)+((mouseXStart)*(BufFrames.kr(bufnum))))
+		*MouseX.kr(f.value,
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)
 	);
 	var amp2 = amp*AmpComp.ir(freq.max(50))*0.4;
 	var env = EnvGen.ar(
@@ -48,11 +51,13 @@ SynthDef(\percSin1,{|out,amp=0.1, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0|
 	var snd = FSinOsc.ar(freq);
 	var trig =  Blip.kr(trigs,1,80);
+	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
 	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
 		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
-		*MouseX.kr((mouseXStart)*(BufFrames.kr(bufnum)),
-			(((BufFrames.kr(bufnum))-((mouseXStart)*(BufFrames.kr(bufnum))))
-				*mouseXScale)+((mouseXStart)*(BufFrames.kr(bufnum))))
+		*MouseX.kr(f.value,
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)
 	);
 	var amp2 = amp * AmpComp.ir(freq.max(50))*0.5;
 	var env = EnvGen.ar(
