@@ -1,15 +1,18 @@
+
+
 (
 
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0|
+	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
 	var snd = FSinOsc.ar(freq);
 	var trig =  Blip.kr(trigs,1,80);
 	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
 		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
-		*MouseX.kr((mouseXStart)*(BufFrames.kr(bufnum)),
-			(((BufFrames.kr(bufnum))-((mouseXStart)*(BufFrames.kr(bufnum))))
-				*mouseXScale)+((mouseXStart)*(BufFrames.kr(bufnum))))
+		*MouseX.kr(f.value,
+			(((BufFrames.kr(bufnum))-(f.value))
+				*mouseXScale)+(f.value))
 	);
 	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
 	var env = EnvGen.ar(Env.sine(sustain,amp2),
@@ -190,6 +193,7 @@ Window.closeAll;
 ~folder61 = PathName.new("C:/Users/Jackalaka/Desktop/misc samples/10_28_18-magents");
 (
 ~folder61.entries.do({
+
 	arg path;
 	~mag = ~mag.add(Buffer.read(s,path.fullPath));
 })
@@ -206,8 +210,8 @@ Window.closeAll;
 	\amp, 0.9,
 	\rate, Pn(Pfunc({~test})),
 	\samp_rand_rate, 100,
-	\samp_rand_range,Pkey(\sustain),
+	\samp_rand_range,1,
 	\mouseXStart, 0.1,
-	\mouseXScale, Pkey(\sustain)
+	\mouseXScale, 1
 ).play;
 )
