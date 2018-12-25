@@ -4,7 +4,7 @@
 
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
-	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0|
+	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
 	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
 	var snd = FSinOsc.ar(freq);
 	var trig =  Blip.kr(trigs,1,80);
@@ -18,7 +18,8 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
 	var env = EnvGen.ar(Env.sine(sustain,amp2),
 		doneAction:2);
-	OffsetOut.ar(out,HPF.ar(Pan2.ar(sig*env,pan),25));
+	var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
+	OffsetOut.ar(out, sigf);
 },\ir!5).add;
 );
 
@@ -162,6 +163,7 @@ SynthDef(\gaborGen1,{|out, amp=0.01, freq=440, sustain=0.01, pan|
 	OffsetOut.ar(out,HPF.ar(Pan2.ar(snd*env,pan),25));
 },\ir!5).add;
 );
+~test = 1;
 )
 
 s.reboot;
@@ -183,7 +185,7 @@ w = Window("Audio Microscope", Rect(
 .action_({
 	arg obj;
 	var cf;
-	cf = obj.value.linexp(0,1,0.1,4000).postln;
+	cf = obj.value.linexp(0,1,60,4000).postln;
 	~test = cf;
 });
 )
@@ -204,19 +206,22 @@ Window.closeAll;
 })
 ))
 
-~test = 1;
+
+//Pn(Pfunc({~test}))
 (
  ~one = Pbindef(\1,
 	\instrument,\gabor1,
-	\sustain,Pn(Pgeom(0.1,1.2,12),inf),
-	\dur,Pn(Pgeom(0.02,1.2,3),inf),
-	\bufnum, Pn(Prand([~mag[1],~mag[0]],inf),inf), //magnet5 experiments
+	\sustain,Pn(Pgeom(0.2,1.2,1),inf),
+	\dur,Pn(Pgeom(0.004,1.2,3),inf),
+	\bufnum, Pn(Prand([~mag[1]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.9,
-	\rate, Pn(Pfunc({~test})),
+	\amp, 7.1,
+	\rate, 1.0,
 	\samp_rand_rate, 100,
-	\samp_rand_range,1,
+	\samp_rand_range,1.35,
 	\mouseXStart, 0.1,
-	\mouseXScale, 1
+	\mouseXScale, 1,
+	\filterFreq, Pn(Pfunc({~test})),
+	\q, 0.2
 ).play;
 )
