@@ -37,17 +37,29 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 (
  ~one = Pbindef(\1,
 	\instrument,\gabor1,
-	\sustain,Pn(Pgeom(0.2,1.2,1),inf),
+	\sustain,Pn(Pgeom(0.2,1.2,12),inf),
 	\dur,Pn(Pgeom(0.004,1.2,3),inf),
-	\bufnum, Pn(Prand([~mag[1]],inf),inf), //magnet5 experiments
+	\bufnum, Pn(Prand([~mag[3]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 7.1,
+	\amp, 0.1,
 	\rate, 1.0,
 	\samp_rand_rate, 100,
-	\samp_rand_range,1.35,
-	\mouseXStart, 0.1,
-	\mouseXScale, 1,
-	\filterFreq, Pn(Pfunc({~test})),
-	\q, 0.2
+	\samp_rand_range,1.04,
+	\mouseXStart, 0.4,
+	\mouseXScale, 0.01,
+	\filterFreq, Pn(Pfunc({~freq})),
+	\q, 0.007
 ).play;
+)
+~one.stop;
+MIDIIn.connectAll;
+
+(
+~freq = 440;
+MIDIdef.noteOn(\noteOn, {
+	arg vel, nn;
+	var fr = nn.midicps;
+	~freq = fr;
+	~freq.postln;
+});
 )
