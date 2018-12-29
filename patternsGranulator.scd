@@ -1,7 +1,7 @@
 
 
 (
-
+//x'd out BPF for now
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
