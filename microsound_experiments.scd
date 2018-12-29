@@ -1,3 +1,93 @@
+///Order confusion with sounds in fast succession
+//notice perception bias based off if you start at obviously percieved lag
+//or start at the ara below threshold of lag
+//explantion written in margins of microsound on page 25
+(
+//a simple percussive envelope
+SynthDef(\percSin, {|out,amp=0.1,freq=440,sustain=0.1,
+	pan|
+	var snd = FSinOsc.ar(freq);
+	var env = EnvGen.ar(
+		Env.perc(0.1,0.9,amp),timeScale:sustain,
+		doneAction:2);
+	OffsetOut.ar(out,Pan2.ar(snd*env,pan));
+}, \ir!5).add;
+)
+(
+Pbindef(\hi,
+	\instrument,\percSin, \sustain,0.05,
+	\freq,870, \amp,0.2, \dur,1, \lag,0
+).play;
+Pbindef(\lo,
+	\instrument,\percSin, \sustain,0.05,
+	\freq,240, \amp,0.1, \dur,1, \lag,0
+).play;
+)
+
+//try different lag times between them
+Pbindef(\hi, \lag,0.1);
+Pbindef(\hi, \lag,0.03);
+Pbindef(\hi, \lag,0.01);
+Pbindef(\hi, \lag,0.001);
+
+
+//hi too early or too late by a fixed time -
+// which one is first?
+Pbindef(\hi, \lag, ([-1,1].choose*0.01).postln).play;
+Pbindef(\hi, \lag,([-1,1].choose*0.03).postln).play;
+//
+//is it easier to here when sounds panned apart
+Pbindef(\hi,\pan,1); Pbindef(\lo,\pan,-1);
+Pbindef(\hi, \pan,-1); Pbindef(\lo,\pan,1);
+
+
+
+///Order confusion with sounds in fast succession
+//notice perception bias based off if you start at obviously percieved lag
+//or start at the ara below threshold of lag
+//explantion written in margins of microsound on page 25
+(
+//a simple percussive envelope
+SynthDef(\percSin, {|out,amp=0.1,freq=440,sustain=0.1,
+	pan|
+	var snd = FSinOsc.ar(freq);
+	var env = EnvGen.ar(
+		Env.perc(0.1,0.9,amp),timeScale:sustain,
+		doneAction:2);
+	OffsetOut.ar(out,Pan2.ar(snd*env,pan));
+}, \ir!5).add;
+)
+(
+Pbindef(\hi,
+	\instrument,\percSin, \sustain,0.05,
+	\freq,870, \amp,0.2, \dur,1, \lag,0
+).play;
+Pbindef(\lo,
+	\instrument,\percSin, \sustain,0.05,
+	\freq,240, \amp,0.1, \dur,1, \lag,0
+).play;
+)
+
+//try different lag times between them
+Pbindef(\hi, \lag,0.1);
+Pbindef(\hi, \lag,0.03);
+Pbindef(\hi, \lag,0.01);
+Pbindef(\hi, \lag,0.001);
+
+
+//hi too early or too late by a fixed time -
+// which one is first?
+Pbindef(\hi, \lag, ([-1,1].choose*0.01).postln).play;
+Pbindef(\hi, \lag,([-1,1].choose*0.03).postln).play;
+//
+//is it easier to here when sounds panned apart
+Pbindef(\hi,\pan,1); Pbindef(\lo,\pan,-1);
+Pbindef(\hi, \pan,-1); Pbindef(\lo,\pan,1);
+
+
+//Perception of pitch dependent on frequency experiment
+//see microsound page 24
+
 (//a gabor grain, gaussian-shaped env
 SynthDef(\gabor, {|out, freq=440,sustain=1,pan,amp=0.1,
 	width=0.25|
@@ -10,11 +100,12 @@ SynthDef(\gabor, {|out, freq=440,sustain=1,pan,amp=0.1,
 (
 Pbindef(\grain,
 	\instrument, \gabor, \freq,200,
-	\dur,1, \sustain,15   /1000, \amp,0.9
+	\dur,1, \sustain,15/1000, \amp,0.9
 ).play;
 )
 
 
+///musical experiments
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
