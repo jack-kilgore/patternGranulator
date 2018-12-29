@@ -1,6 +1,9 @@
 # patternGranulator
 A microscope for exploring sound. Text-based for precision. 
 
+Things to Do: 
+   - make the duration and sustain more readable
+      - change to milleseconds and use names like rate (duration) and duration (for sustain)
 Ideas: 
    How to maintain the mouse as a tool for movement through buffers while creating a GUI? 
       - using external controller 
