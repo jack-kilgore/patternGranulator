@@ -23,7 +23,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 
 (
 ~mag= Array.new;
-~folder61 = PathName.new("C:/Users/Jackalaka/Desktop/misc samples/10_28_18-magents");
+~folder61 = PathName.new("/Users/jkilgore/Music/misc-samples/10_28_18-magents/");
 (
 ~folder61.entries.do({
 

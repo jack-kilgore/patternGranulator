@@ -18,8 +18,9 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
 	var env = EnvGen.ar(Env.sine(sustain,amp2),
 		doneAction:2);
-	var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
-	OffsetOut.ar(out, sigf);
+	//var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
+	var siga = HPF.ar(Pan2.ar(sig*env,pan),25);
+	OffsetOut.ar(out, siga);
 },\ir!5).add;
 );
 
@@ -197,7 +198,7 @@ Window.closeAll;
 
 (
 ~mag= Array.new;
-~folder61 = PathName.new("C:/Users/Jackalaka/Desktop/misc samples/10_28_18-magents");
+~folder61 = PathName.new("/Users/jkilgore/Music/misc-samples/10_28_18-magents/");
 (
 ~folder61.entries.do({
 
@@ -215,13 +216,31 @@ Window.closeAll;
 	\dur,Pn(Pgeom(0.004,1.2,3),inf),
 	\bufnum, Pn(Prand([~mag[1]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 7.1,
+	\amp, 3.1,
 	\rate, 1.0,
 	\samp_rand_rate, 100,
-	\samp_rand_range,1.35,
+	\samp_rand_range,1.0,
 	\mouseXStart, 0.1,
 	\mouseXScale, 1,
-	\filterFreq, Pn(Pfunc({~test})),
-	\q, 0.2
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+)
+
+(
+ ~one = Pbindef(\1,
+	\instrument,\gabor1,
+	\sustain,0.02,
+	\dur,0.03,
+	\bufnum, Pn(Prand([~mag[1]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 20.1,
+	\rate, 0.7,
+	\samp_rand_rate, 100,
+	\samp_rand_range,2.6,
+	\mouseXStart, 0,
+	\mouseXScale, 1,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
 ).play;
 )
