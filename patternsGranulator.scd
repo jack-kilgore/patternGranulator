@@ -198,9 +198,9 @@ Window.closeAll;
 
 (
 ~mag= Array.new;
-~folder61 = PathName.new("/Users/jkilgore/Music/misc-samples/10_28_18-magents/");
+~folder65 = PathName.new("/Users/jkilgore/Music/misc-samples/10_28_18-magents");
 (
-~folder61.entries.do({
+~folder65.entries.do({
 
 	arg path;
 	~mag = ~mag.add(Buffer.read(s,path.fullPath));
@@ -219,7 +219,7 @@ Window.closeAll;
 	\amp, 3.1,
 	\rate, 1.0,
 	\samp_rand_rate, 100,
-	\samp_rand_range,1.0,
+	\samp_rand_range,1.01,
 	\mouseXStart, 0.1,
 	\mouseXScale, 1,
 	//\filterFreq, Pn(Pfunc({~test})),

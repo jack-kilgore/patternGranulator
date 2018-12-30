@@ -129,16 +129,49 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 );
 
 (
+~mag= Array.new;
+~folder61 = PathName.new("/Users/jkilgore/Music/misc-samples/10_28_18-magents/");
+(
+~folder61.entries.do({
+
+	arg path;
+	~mag = ~mag.add(Buffer.read(s,path.fullPath));
+})
+));
+
+(
  ~one = Pbindef(\1,
 	\instrument,\gabor1,
 	\sustain,0.02,
-	\dur,0.03,
+	\dur,1/30,
 	\bufnum, Pn(Prand([~mag[1]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
 	\amp, 20.1,
 	\rate, 0.7,
 	\samp_rand_rate, 100,
-	\samp_rand_range,2.6,
+	\samp_rand_range,1.00,
+	\mouseXStart, 0,
+	\mouseXScale, 1,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+)
+
+
+
+////
+
+(
+ ~one = Pbindef(\1,
+	\instrument,\gabor1,
+	\sustain,0.02,
+	\dur,1/10,
+	\bufnum, Pn(Prand([~mag[1]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 20.1,
+	\rate, 0.7,
+	\samp_rand_rate, 100,
+	\samp_rand_range,1.06,
 	\mouseXStart, 0,
 	\mouseXScale, 1,
 	//\filterFreq, Pn(Pfunc({~test})),
