@@ -17,22 +17,12 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 		doneAction:2);
 	//var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
 	var siga = HPF.ar(Pan2.ar(sig*env,pan),25);
-	siga = BPeakEQ.ar(siga,150.0,1, -20.0);
-	siga = BPeakEQ.ar(siga,100.0,0.2, -20.0);
-	siga = BPeakEQ.ar(siga, 600, 0.1, -8);
-	siga = BPeakEQ.ar(siga,1900.0,1, -12.0);
-	siga = BPeakEQ.ar(siga, 1500, 0.6, -24);
-	siga = BPeakEQ.ar(siga, 1000, 0.1, -6);
-	siga = BPeakEQ.ar(siga, 480, 0.7, -6);
-	siga = BPeakEQ.ar(siga, 4500, 2, -16);
-	siga = LPF.ar(siga,5000);
-	//siga = HPF.ar(siga, 400);
 	fBLoopIn = LocalIn.ar(2);
 	processing = siga + LeakDC.ar(DelayN.ar(fBLoopIn,0.98,0.98,0.9));
 	processing = processing.clip;
 	fBLoopOut = LocalOut.ar(processing);
 
-	OffsetOut.ar(out, processings);
+	OffsetOut.ar(out, processing);
 },\ir!5).add;
 );
 
@@ -65,11 +55,11 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
 	\amp, 5.5,
-	\rate, 0.94,
+	\rate, 1,
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.0001, //1.000000 - 1000  1.00001
-	\mouseXStart, 0.23,
-	\mouseXScale,0.01 ,
+	\mouseXStart, 0,
+	\mouseXScale,0.1 ,
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;
