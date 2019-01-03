@@ -177,9 +177,26 @@ SynthDef(\gabor3,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	\amp, 0.5,
 	\rate, 1,
 	\samp_rand_rate, 100,
-	\samp_rand_range,1000, //1.010 - 1000  1.00001
-	\mouseXStart, 0,
-	\mouseXScale,0.33,
+	\samp_rand_range,1.01, //1.010 - 1000  1.00001
+	\mouseXStart, 0.62,
+	\mouseXScale,0.3,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+)
+(
+ ~one = Pbindef(\1,
+	\instrument,\gabor3,
+	\sustain,Pwhite(0.07,0.11),
+	\dur,1/1000,
+	\bufnum, Pn(Prand([~duskWalk[0]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.5,
+	\rate, 1,
+	\samp_rand_rate, 100,
+	\samp_rand_range,2.0, //1.0000 - 1000  1.00001
+	\mouseXStart, 0.62,
+	\mouseXScale,0.3,
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;

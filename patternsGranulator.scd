@@ -144,6 +144,9 @@ SynthDef(\gaborGen1,{|out, amp=0.01, freq=440, sustain=0.01, pan|
 },\ir!5).add;
 );
 ~test = 1;
+
+
+
 //x'd out BPF for now, need to do more experiments in separate file
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
@@ -168,7 +171,6 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 );
 )
 
-s.reboot;
 
 
 
@@ -193,25 +195,28 @@ s.reboot;
 (
 ~folder739.entries.do({
 	arg path;
-	~chimes = ~chimes.add(Buffer.read(s,path.fullPath));
+	~chimes = ~chimes.add( Buffer.read(s,path.fullPath));
 })
 ));
-
+s.reboot;
 
 //Pn(Pfunc({~test}))
 (
  ~one = Pbindef(\1,
 	\instrument,\gabor1,
+	\type, \note,
 	\sustain,Pn(Pgeom(0.2,1.2,1),inf),
-	\dur,Pn(Pgeom(1/30,1.2,1),inf),
+	\dur,Pn(Pgeom(1/10,1.2,1),inf),
 	\bufnum, Pn(Prand([~chimes[0]],inf),inf),
 	\trigs, 0.001,
-	\amp, 3.1,
+	\amp, 1.1,
 	\rate, 1,
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.01,
 	\mouseXStart, 0.1,
 	\mouseXScale, 1,
+	//\stretch, 10
+	//\delta,
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;
@@ -234,6 +239,85 @@ s.reboot;
 	//\q, 0.01
 ).play;
 )
+
+
+//slow and big grains SOUND GOOD W wind chimes
+(
+ ~slow = Pbindef(\1,
+	\instrument,\gabor1,
+	\type, \note,
+	\dur,1/0.3,
+	\tempo, 1,   // tempo is the num synths running from pattern * number_inputted
+	\stretch, Pn(Pwhite(0.1,1.5)),   //expands/contracts durations //scalar for durations pretty much
+	\sustain,10,
+	\bufnum, Pn(Prand([~chimes[0]],inf),inf),
+	\trigs, 0.001,
+	\amp, 1.1,
+	\rate, 1,
+	\samp_rand_rate, 100,
+	\samp_rand_range,1.01,
+	\mouseXStart, 0.0,
+	\mouseXScale, 0.1,
+	\group, nil
+).play;
+)
+
+s.reboot;
+
+
+//----------------------Language-Side Experiments
+(
+(type: \group,
+id: 7         //create a group with nodeID 1
+).play;
+)
+
+
+(
+ ~exper = Pbindef(\1,
+	\instrument,\gabor1,
+	\type, \note,
+	\dur,1/0.3,
+	\tempo, 1,   // tempo is the num synths running from pattern * number_inputted
+	\stretch, Pn(Pwhite(0.1,1.5)),   //expands/contracts durations //scalar for durations pretty much
+	\sustain,10,
+	\bufnum, Pn(Prand([~chimes[0]],inf),inf),
+	\trigs, 0.001,
+	\amp, 1.3,
+	\rate, 1,
+	\samp_rand_rate, 100,
+	\samp_rand_range,1.01,
+	\mouseXStart, 0.0,
+	\mouseXScale, 0.1,
+	\group, 7 //if group is made, how to join the group
+).play;
+)
+
+
+(
+(type: \off, id: 7).play;         //release all notes in the group THIS seems broken for this use case
+//(type: \kill, id: 7, lag: 3).play; //free groups 3 seconds later
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////
