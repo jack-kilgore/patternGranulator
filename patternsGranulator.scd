@@ -200,6 +200,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 ));
 s.reboot;
 
+
 //Pn(Pfunc({~test}))
 (
  ~one = Pbindef(\1,
