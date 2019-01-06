@@ -193,19 +193,76 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 ));
 
 (
- ~sticker5 = Pbindef(\chimes0,
+ ~chimes0 = Pbindef(\chimes0,
 	\instrument,\gabor1,
 	\sustain,0.018,
 	\dur,1/720,
 	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.4,
+	\amp, 0.01,
 	\rate, 0.4,
 	\samp_rand_rate, 12,
 	\samp_rand_range,2.1, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
 	\mouseXScale,0.5,
 	\pan, Pn(Pwhite(-1.0,1.0)),
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+);
+
+(
+ ~chimes1 = Pbindef(\chimes1,
+	\instrument,\gabor1,
+	\sustain,0.038,
+	\dur,1/520,
+	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.4,
+	\rate, 1,
+	\samp_rand_rate, 12,
+	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
+	\mouseXStart, 0.6,
+	\mouseXScale,0.01,
+	\pan, Pn(Pwhite(0.1, 0.8))
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+);
+
+(
+ ~chimes2 = Pbindef(\chimes2,
+	\instrument,\gabor1,
+	\sustain,0.038,
+	\dur,1/520,
+	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.12,
+	\rate, 0.2,
+	\samp_rand_rate, 12,
+	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
+	\mouseXStart, 0.101,
+	\mouseXScale,1,
+	\pan, Pn(Pwhite(0.1, 0.8))
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+);
+
+(
+ ~chimes3 = Pbindef(\chimes3,
+	\instrument,\gabor1,
+	\sustain,0.05,
+	\dur,1/520,
+	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.9,
+	\rate, 1.2,
+	\samp_rand_rate, 12,
+	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
+	\mouseXStart, 0.1,
+	\mouseXScale,0.01,
+	\pan, Pn(Pwhite(0.1, 0.8))
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
 ).play;
