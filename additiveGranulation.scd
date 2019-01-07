@@ -34,7 +34,6 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	~sticker = ~sticker.add(Buffer.read(s,path.fullPath));
 })
 ));
-
 ///should i use a mono or stereo signal?
 // mono would be best but how do you make it sound like they are moving dynamically
 

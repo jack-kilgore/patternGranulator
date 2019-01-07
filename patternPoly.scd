@@ -1,10 +1,10 @@
 ( //a gabor(approx. gaussian-shaped) grain
-SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
+SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
 	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
 	var snd = FSinOsc.ar(freq);
 	var trig =  Blip.kr(trigs,1,80);
-	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
+	var sig = PlayBuf.ar(1, bufnum, BufRateScale.kr(bufnum)*rate, trig,
 		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
 		*MouseX.kr(f.value,
 			((BufFrames.kr(bufnum)-f.value)
@@ -17,7 +17,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
 	var siga = HPF.ar(Pan2.ar(sig*env,pan),25);
 	siga = BPeakEQ.ar(siga, 1200, 0.3, -12.0);
-	OffsetOut.ar(out, siga);
+	OffsetOut.ar(out, Pan2.ar(siga,pan));
 },\ir!5).add;
 );
 (
@@ -61,12 +61,12 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 })
 ));
 (
-~mime= Array.new;
+~sticker= Array.new;
 ~folder73 = PathName.new("/Users/jkilgore/Music/misc-samples/sticker");
 (
 ~folder73.entries.do({
 	arg path;
-	~mime = ~mime.add(Buffer.read(s,path.fullPath));
+	~sticker = ~sticker.add(Buffer.read(s,path.fullPath));
 })
 ));
 
@@ -78,7 +78,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	\instrument,\gabor1,
 	\sustain,0.038,
 	\dur,1/520,
-	\bufnum, Pn(Prand([~mime[9]],inf),inf), //magnet5 experiments
+	\bufnum, Pn(Prand([~sticker[10]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
 	\amp, 0.5,
 	\rate, 1,
@@ -86,6 +86,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	\samp_rand_range,1.1, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
 	\mouseXScale,1,
+	\pan, 0.7
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
 ).play;
@@ -96,7 +97,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	\instrument,\gabor1,
 	\sustain,0.038,
 	\dur,1/520,
-	\bufnum, Pn(Prand([~mime[9]],inf),inf), //magnet5 experiments
+	\bufnum, Pn(Prand([~sticker[10]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
 	\amp, 0.5,
 	\rate, 1.2,
@@ -104,6 +105,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	\samp_rand_range,1.1, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
 	\mouseXScale,1,
+	\pan, -0.7
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
 ).play;
@@ -113,18 +115,61 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	\instrument,\gabor1,
 	\sustain,0.038,
 	\dur,1/520,
-	\bufnum, Pn(Prand([~mime[9]],inf),inf), //magnet5 experiments
+	\bufnum, Pn(Prand([~sticker[10]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.5,
-	\rate, 0.8,
+	\amp, 0.7,
+	\rate, 0.6,
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.1, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
 	\mouseXScale,1,
+	\pan, 0.2
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
 ).play;
 )
+
+(
+ ~two3 = Pbindef(\4,
+	\instrument,\gabor1,
+	\sustain,0.042,
+	\dur,1/520,
+	\bufnum, Pn(Prand([~sticker[10]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.7,
+	\rate, 1.6,
+	\samp_rand_rate, 12,
+	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
+	\mouseXStart, 0,
+	\mouseXScale,1,
+	\pan, Pn(Pseries(-1, 0.01, 400)),
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+)
+
+(
+ ~two4 = Pbindef(\5,
+	\instrument,\gabor1,
+	\sustain,0.012,
+	\dur,1/720,
+	\bufnum, Pn(Prand([~sticker[10]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.4,
+	\rate, 0.4,
+	\samp_rand_rate, 12,
+	\samp_rand_range,2.1, //1.000000 - 1000  1.00001
+	\mouseXStart, 0,
+	\mouseXScale,1,
+	\pan, 0,
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+)
+
+
+
+
 ~two1.stop;
 (
  ~four = Pbindef(\4,
