@@ -278,14 +278,14 @@ id: 7         //create a group with nodeID 1
  ~exper = Pbindef(\1,
 	\instrument,\gabor1,
 	\type, \note,
-	\dur,1/0.3,
+	\dur,1/60,
 	\tempo, 1,   // tempo is the num synths running from pattern * number_inputted
 	\stretch, Pn(Pwhite(0.1,1.5)),   //expands/contracts durations //scalar for durations pretty much
-	\sustain,10,
+	\sustain,0.08,
 	\bufnum, Pn(Prand([~chimes[0]],inf),inf),
 	\trigs, 0.001,
-	\amp, 1.3,
-	\rate, 1,
+	\amp, 2.3,
+	\rate, Pstep([1,1.1,1.4,0.9,0.6,1],0.001,inf),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.01,
 	\mouseXStart, 0.0,
@@ -299,6 +299,65 @@ id: 7         //create a group with nodeID 1
 (type: \off, id: 7).play;         //release all notes in the group THIS seems broken for this use case
 //(type: \kill, id: 7, lag: 3).play; //free groups 3 seconds later
 )
+
+
+//Pstep experiments
+(
+( //a gabor(approx. gaussian-shaped) grain
+SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
+	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
+	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
+	var snd = FSinOsc.ar(freq);
+	var trig =  Blip.kr(trigs,1,80);
+	var sig = PlayBuf.ar(1, bufnum, BufRateScale.kr(bufnum)*rate, trig,
+		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
+		*MouseX.kr(f.value,
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)
+	);
+	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
+	var env = EnvGen.ar(Env.sine(sustain,amp2),
+		doneAction:2);
+	//var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
+	var siga = HPF.ar(Pan2.ar(sig*env,pan),25);
+	OffsetOut.ar(out, siga);
+},\ir!5).add;
+);
+)
+(
+~chimes= Array.new;
+~folder739 = PathName.new("/Users/jkilgore/Music/misc-samples/wind_chimes");
+(
+~folder739.entries.do({
+	arg path;
+	~chimes = ~chimes.add( Buffer.read(s,path.fullPath));
+})
+));
+//potential for integrating FM synthesis
+
+(
+ ~exper = Pbindef(\1,
+	\instrument,\gabor1,
+	\type, \note,
+	\dur,1/60,
+	\tempo, 1,   // tempo is the num synths running from pattern * number_inputted
+	\stretch, Pn(Pwhite(0.1,1.5)),   //expands/contracts durations //scalar for durations pretty much
+	\sustain,0.08,
+	\bufnum, Pn(Prand([~chimes[1]],inf),inf),
+	\trigs, 0.001,
+	\amp, 2.3,
+	\rate, Pstep([1,1.1,1.4,0.9,0.6,1,1.9,2.1,10.1,12.3,-4],1/120,inf),
+	\samp_rand_rate, 100,
+	\samp_rand_range,1.01,
+	\mouseXStart, 0.0,
+	\mouseXScale, 0.1,
+	\pan, Pstep([1/1, -1/1.1, 1/1.4, -1/0.9,1/0.6,-1/1,1/1.9,-1/2.1,1/10.1,-1/12.3,-1/4],1/1/120,inf)
+).play;
+)
+
+
+
 
 
 

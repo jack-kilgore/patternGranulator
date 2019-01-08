@@ -102,13 +102,13 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\dur,1/520,
 	\bufnum, Pn(Prand([~sticker[10]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.7,
+	\amp, 0.75,
 	\rate, 1.6,
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.01, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
 	\mouseXScale,0.5,
-	\pan, Pn(Plprand(-0.1, 0.9)),
+	\pan, Pn(Phprand(0.6, 0.99)),
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
 ).play;
@@ -180,6 +180,31 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	OffsetOut.ar(out, Pan2.ar(siga,pan));
 },\ir!5).add;
 );
+( //a gabor(approx. gaussian-shaped) grain
+SynthDef(\gabor1_1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2000, rate =1,
+	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
+	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
+	var snd = FSinOsc.ar(freq);
+	var trig =  Blip.kr(trigs,1,80);
+	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
+		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
+		*MouseX.kr(f.value,
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)
+	);
+	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
+	var env = EnvGen.ar(Env.sine(sustain,amp2),
+		doneAction:2);
+	var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
+	var siga = HPF.ar(Pan2.ar(sig*env,pan),25);
+	siga = BPeakEQ.ar(siga, 1200, 0.3, -12.0);
+	siga = BPeakEQ.ar(siga, 1700, 0.3, -12.0);
+	siga = BPeakEQ.ar(siga, 3500, 0.3, -8.0);
+	siga = Compander.ar(siga, sig, 0.7, 1.0, 4.4, 0.002);
+	OffsetOut.ar(out, Pan2.ar(siga,pan));
+},\ir!5).add;
+)
 
 (
 ~chimes= Array.new;
@@ -217,7 +242,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\dur,1/520,
 	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.4,
+	\amp, 0.1,
 	\rate, 1,
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
@@ -236,12 +261,12 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\dur,1/520,
 	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.12,
+	\amp, 0.01,
 	\rate, 0.2,
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
-	\mouseXStart, 0.101,
-	\mouseXScale,1,
+	\mouseXStart, 0,
+	\mouseXScale,0.4,
 	\pan, Pn(Pwhite(0.1, 0.8))
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
@@ -250,12 +275,12 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 
 (
  ~chimes3 = Pbindef(\chimes3,
-	\instrument,\gabor1,
+	\instrument,\gabor1_1,
 	\sustain,0.05,
 	\dur,1/520,
 	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.9,
+	\amp, 0.8,
 	\rate, 1.2,
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
@@ -266,3 +291,44 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	//\q, 0.6
 ).play;
 );
+
+(
+ ~chimes4 = Pbindef(\chimes4,
+	\instrument,\gabor1_1,
+	\sustain,0.05,
+	\dur,1/520,
+	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.4,
+	\rate, Pn(Pgeom(1.2,1.00000001,1),inf),
+	\samp_rand_rate, 12,
+	\samp_rand_range,1.002, //1.000000 - 1000  1.00001
+	\mouseXStart, 0.1102,
+	\mouseXScale,0.0006,
+	\pan, Pn(Pwhite(0.1, 0.8))
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+);
+
+(
+ ~chimes5 = Pbindef(\chimes5,
+	\instrument,\gabor1,
+	\sustain,0.01,
+	\dur,1/520,
+	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.1,
+	\rate, 1.4,
+	\samp_rand_rate, 12,
+	\samp_rand_range,1.1, //1.000000 - 1000  1.00001
+	\mouseXStart, 0.6,
+	\mouseXScale,0.001,
+	\pan, Pn(Pwhite(0.1, 0.8))
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+);
+
+
+///Next up try with the same chimes file, but mono (aka chimes[1])
