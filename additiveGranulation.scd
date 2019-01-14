@@ -384,7 +384,7 @@ SynthDef(\mgabor1_1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trig
 	siga = Compander.ar(siga, sig, 0.7, 1.0, 4.4, 0.002);
 	OffsetOut.ar(out, Pan2.ar(siga,pan));
 },\ir!5).add;
-)
+);
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\mgabor1_2,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
@@ -410,7 +410,7 @@ SynthDef(\mgabor1_2,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trig
 	siga = Compander.ar(siga, sig, 0.7, 1.0, 4.4, 0.002);
 	OffsetOut.ar(out, Pan2.ar(siga,pan));
 },\ir!5).add;
-)
+);
 (
 ~chimes= Array.new;
 ~folder739 = PathName.new("/Users/jkilgore/Music/misc-samples/wind_chimes");
@@ -421,7 +421,7 @@ SynthDef(\mgabor1_2,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trig
 })
 ));
 
-
+(
 (
  ~mchimes0 = Pbindef(\mchimes0,
 	\instrument,\mgabor1,
@@ -591,3 +591,4 @@ SynthDef(\mgabor1_2,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trig
 	//\q, 0.6
 ).play;
 );
+)
