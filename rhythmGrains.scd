@@ -92,7 +92,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 ));
 
 (
- ~one = Pbindef(\1,
+ ~one = Pbindef(\2,
 	\instrument,\gabor1,
 	\type, \note,
 	\sustain,Pstep([0.016,0.016,0.017,0.09,0.017,0.004,0.12,0.03,0.09,0.004,0.001,0.001,0.001,0.1,0.01,0.001],1/9,inf),
