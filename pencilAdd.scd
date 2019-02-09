@@ -145,7 +145,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 
 
 ///DRONE
-
+/*
 (
  ~three = Pbindef(\4,
 	\instrument,\gabor1,
@@ -166,7 +166,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;
-)
+);*/
 
 (
  ~three = Pbindef(\5,
@@ -188,7 +188,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;
-)
+);
 
 (
  ~three = Pbindef(\6,
@@ -199,7 +199,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	\bufnum, Pn(Prand([~pencil[5]],inf),inf),
 	\trigs, 0.001,
 	\amp, 2.2,
-	\rate, Pn(Pbrown(0.64,0.65)),
+	\rate, Pn(Pbrown(0.54,0.55)),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
 	\mouseXStart, 0.6,
@@ -210,7 +210,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;
-)
+);
 (
  ~three = Pbindef(\7,
 	\instrument,\gabor1,
@@ -220,7 +220,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	\bufnum, Pn(Prand([~pencil[5]],inf),inf),
 	\trigs, 0.001,
 	\amp, 2.2,
-	\rate, Pn(Pbrown(0.63,0.65)),
+	\rate, Pn(Pbrown(0.53,0.55)),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
 	\mouseXStart, 0.6,
@@ -231,21 +231,42 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;
-)
-
+);
 (
  ~three = Pbindef(\8,
-	\instrument,\sin,
+	\instrument,\gabor1,
+	\type, \note,
+	\sustain,Pseg([0.14,0.14],3,\cub,inf),
+	\dur,Pn(Pwhite(1/11,1/26)),
+	\bufnum, Pn(Prand([~pencil[1]],inf),inf),
+	\trigs, 0.001,
+	\amp, 2.9,
+	\rate, Pn(Pwhite(1.0,1.1)),
+	\samp_rand_rate, 100,
+	\samp_rand_range,1.001,
+	\mouseXStart, Pn(Pseg([0.85,0.86],1000)),
+	\mouseXScale,1,
+	\pan, 0
+	//\stretch, 10
+	//\delta,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+);
+
+(
+ ~three = Pbindef(\9,
+	\instrument,\gabor1,
 	\type, \note,
 	\sustain,Pseg([0.1,0.1],3,\cub,inf),
-	\dur,5,
-	//\bufnum, Pn(Prand([~bowl[1]],inf),inf),
+	\dur,1/400,
+	\bufnum, Pn(Prand([~pencil[5]],inf),inf),
 	\trigs, 0.001,
-	\amp, 0.6,
-	\rate, Pn(Pbrown(1.63,1.65)),
+	\amp, 8.2,
+	\rate, Pn(Pbrown(0.28,0.29)),
 	\samp_rand_rate, 100,
-	\samp_rand_range,1.01,
-	\mouseXStart, 0.6,
+	\samp_rand_range,1.001,
+	\mouseXStart, Pn(Pseg([0.6,0.601],1000)),
 	\mouseXScale,1,
 	\pan, Pn(Pwhite(-1,1))
 	//\stretch, 10
@@ -253,7 +274,30 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;
-)
+);
+
+(
+ ~three = Pbindef(\10,
+	\instrument,\sin,
+	\type, \note,
+	\sustain,Pseg([0.1,0.1],3,\cub,inf),
+	\dur,1/8,
+	//\bufnum, Pn(Prand([~bowl[1]],inf),inf),
+	\trigs, 0.001,
+	\amp, Pn(Pwhite(0.01,0.05)),
+	\rate, Pn(Pbrown(1.63,1.65)),
+	\samp_rand_rate, 100,
+	\samp_rand_range,1.01,
+	\mouseXStart, 0.6,
+	\mouseXScale,1,
+	\pan, Pn(Pwhite(-1,1)),
+	\freq, 16000
+	//\stretch, 10
+	//\delta,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+);
 
 
 
