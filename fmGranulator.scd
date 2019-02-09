@@ -1,3 +1,5 @@
+
+//TRY with magnets
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\fm0,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0,
@@ -97,7 +99,7 @@ w = Window("Audio Microscope", Rect(
 
 
 
-//////
+//
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\fm1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0,
@@ -180,4 +182,124 @@ w = Window("Audio Microscope", Rect(
 	cf = obj.value.linexp(0,1,0.01,3000).postln;
 	~depth = cf;
 });
+)
+
+
+( //a gabor(approx. gaussian-shaped) grain
+SynthDef(\fm2,{|out, amp=0.01, freq=440, sustain=0.01, pan, trigs=2000, rate =1,
+	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0,
+	modfreq=10, carrfreq = 100, moddepth = 1.0 |
+	var fBLoopOut,fBLoopIn,processing;
+	var snd = FSinOsc.ar(freq);
+	var trig =  Blip.kr(trigs,1,80);
+	var mod = SinOsc.ar(carrfreq + (moddepth*SinOsc.ar(modfreq)));
+	var sig = VarSaw.ar(freq)*mod;
+	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
+	var env = Env([0.0, amp*0.9,0.7,amp,amp*0.6,0], [sustain*0.1,sustain*0.2,sustain*0.01,sustain*0.59,sustain*0.1], \sin);
+	var envg = EnvGen.ar(Env.sine(sustain,amp2),
+		doneAction:2);
+
+	//var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
+	var siga = HPF.ar(Pan2.ar(sig*envg*mod,pan),25);
+	//siga = HPF.ar(siga, 400);
+
+	OffsetOut.ar(out, siga);
+},\ir!5).add;
+);
+
+
+(
+ ~mhm = Pbindef(\1,
+	\instrument,\fm2,
+	\sustain,Pn(Pgeom(0.5,1.3,6),inf),
+	\dur,Pn(Pgeom(0.025,1.2,2),inf),
+	\trigs, 0.001,
+	\amp, 4.9,
+	\rate, Pn(Pgeom(0.218,1.17,16),inf),
+	\samp_rand_rate, 100.1,
+	\samp_rand_range,1.86,
+	\modfreq, Pfunc{~mod},
+	\carrfreq, Pfunc{~carr},
+	\moddepth, Pfunc{~depth},
+	\moddepth, Pfunc{~freq}
+).play;
+)
+(
+~carr = 20;
+~mod = 100;
+~depth = 1;
+~freq = 440;
+w = Window("Audio Microscope", Rect(
+	Window.screenBounds.width/1.38,
+	Window.screenBounds.height/1.9,
+	500,
+	400
+))
+.front
+.alwaysOnTop_(true);
+
+~s0 = Slider(w,Rect(20,20,150,30))
+.background_(Color(88/255,127/255,188/255))
+.action_({
+	arg obj;
+	var cf;
+	cf = obj.value.linexp(0,1,60,4000).postln;
+	~carr = cf;
+});
+~s1 = Slider(w,Rect(20,50,150,30))
+.background_(Color(88/255,127/255,188/255))
+.action_({
+	arg obj;
+	var cf;
+	cf = obj.value.linexp(0,1,1,20000).postln;
+	~mod = cf;
+});
+~s2 = Slider(w,Rect(20,80,150,30))
+.background_(Color(88/255,127/255,188/255))
+.action_({
+	arg obj;
+	var cf;
+	cf = obj.value.linexp(0,1,0.01,3000).postln;
+	~depth = cf;
+});
+~s3 = Slider(w,Rect(20,110,150,30))
+.background_(Color(88/255,127/255,188/255))
+.action_({
+	arg obj;
+	var cf;
+	cf = obj.value.linexp(0,1,30,3000).postln;
+	~freq = cf;
+});
+)
+
+MIDIIn.connectAll;
+(
+
+(
+MIDIFunc.cc({ |ccval, cn,chan,src|
+	if(ccval == 1,
+		{ ~rotary = ccval* ~scale},
+		{~rotary = (ccval/(-127))* ~scale}
+	);
+	~rate = ~rate + ~rotary;
+	["~rotary"+ ~rate].postln;
+},1);
+);
+
+
+(
+MIDIFunc.noteOn({ |ccval, cn,chan,src|
+	~scale = ~scale * 10;
+	["~rotary_scale"+ ~scale].postln;
+},9);
+);
+
+(
+MIDIFunc.noteOn({ |ccval, cn,chan,src|
+	~scale = ~scale /10;
+	["~rotary_scale"+ ~scale].postln;
+},10);
+);
+//kill it before you execute it again; does not override previous setting; just runs parallel to them
+
 )

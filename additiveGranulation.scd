@@ -9,11 +9,13 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	var snd = FSinOsc.ar(freq);
 	var trig =  Blip.kr(trigs,1,80);
 	var sig = PlayBuf.ar(1, bufnum, BufRateScale.kr(bufnum)*rate, trig,
-		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
-		*MouseX.kr(f.value,
+		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)*
+		BufFrames.kr(bufnum)*mouseXScale
+
+		/*MouseX.kr(f.value,
 			((BufFrames.kr(bufnum)-f.value)
 				*mouseXScale)
-			+ f.value)
+			+ f.value)*/
 	);
 	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
 	var env = EnvGen.ar(Env.sine(sustain,amp2),
@@ -50,7 +52,7 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.1, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
-	\mouseXScale,0.5,
+	\mouseXScale,Pseg([0,1],15,'sin'),
 	\pan, Pn(Pwhite(0.1, 0.8))
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
@@ -69,7 +71,7 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.1, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
-	\mouseXScale,0.5,
+	\mouseXScale,Pseg([0,1],15,'sin'),
 	\pan, Pn(Phprand(-0.1,0.9)),
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
@@ -83,12 +85,12 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\dur,1/520,
 	\bufnum, Pn(Prand([~sticker[10]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.7,
+	\amp, 0.9,
 	\rate, 0.6,
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.1, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
-	\mouseXScale,0.5,
+	\mouseXScale,Pseg([0,1],25,'sin'),
 	\pan, Pn(Plprand(-0.4, 0.1)),
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
@@ -107,7 +109,7 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.01, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
-	\mouseXScale,0.5,
+	\mouseXScale,Pseg([0,1],15,'sin'),
 	\pan, Pn(Phprand(0.6, 0.99)),
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
@@ -126,8 +128,8 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\samp_rand_rate, 12,
 	\samp_rand_range,1.01, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
-	\mouseXScale,0.5,
-	\pan, Pn(Plprand(-0.9, -0.1)),
+	\mouseXScale,Pseg([0,1],45,'sin'),
+	\pan, Pn(Plprand(-0.9, 0.1)),
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
 ).play;
@@ -145,7 +147,7 @@ SynthDef(\gabor0,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\samp_rand_rate, 12,
 	\samp_rand_range,2.1, //1.000000 - 1000  1.00001
 	\mouseXStart, 0,
-	\mouseXScale,0.5,
+	\mouseXScale,Pseg([0,1],15,'sin'),
 	\pan, Pn(Pwhite(-1.0,1.0)),
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
