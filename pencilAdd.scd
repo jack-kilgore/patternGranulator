@@ -51,7 +51,16 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 );
 
 )
+(
+~yog= Array.new;
+~folder65 = PathName.new("/Users/jkilgore/Music/misc-samples/yogurt/");
+(
+~folder65.entries.do({
 
+	arg path;
+	~yog = ~yog.add(Buffer.read(s,path.fullPath));
+})
+))
 (
 ~pencil= Array.new;
 ~folder65 = PathName.new("/Users/jkilgore/Music/misc-samples/pencilWrites/");
@@ -63,36 +72,61 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 })
 ));
 (
-~bowl= Array.new;
-~folder65 = PathName.new("/Users/jkilgore/Music/misc-samples/bowl and spoon MONO/");
+~v0m= Array.new;
+~folder65 = PathName.new("/Users/jkilgore/Music/misc-samples/vocals/mono");
 (
 ~folder65.entries.do({
 	arg path;
-	~bowl = ~bowl.add(Buffer.read(s,path.fullPath));
+	~v0m = ~v0m.add(Buffer.read(s,path.fullPath));
 })
 ));
+
+
 
 
 (
  ~one = Pbindef(\1,
 	\instrument,\gabor1,
 	\type, \note,
-	\sustain,Pseg([0.01,0.1],1,\cub,inf),
-	\dur,1/19.4,
-	\bufnum, Pn(Prand([~pencil[3]],inf),inf),
+	\sustain,Pseg([0.3,0.07,0.01,0.001,0.0001,0.4,0.4,0.1,0.3,0.001],[17,7,3,16,7,7,14,20],\exp,inf),
+	\dur,Pbrown(1/21,1/24.4,1/10.1),
+	\bufnum, Pn(Prand([~pencil[1]],inf),inf),
 	\trigs, 0.001,
-	\amp, 5.1,
-	\rate, Pn(Pbrown(0.9,3)),
+	\amp, 20.1,
+	\rate, Pn(Pbrown(1.39,1.393)),
 	\samp_rand_rate, 100,
-	\samp_rand_range,1.019,
+	\samp_rand_range,1.012,
 	\mouseXStart, 0,
 	\mouseXScale, 0,
-	\pan, Pn(Pbrown(-0.6,0.8))
+	\pan, 0
 	//\stretch, 10
 	//\delta,
 	//\filterFreq, Pn(Pfunc({~test})),
 	//\q, 0.01
 ).play;
+);
+(
+(
+ ~one = Pbindef(\1,
+	\instrument,\gabor1,
+	\type, \note,
+	\sustain,Pseg([0.07,0.07],42.82,\cub,inf),
+	\dur,Pbrown(1/21,1/23.4,1/10.1),
+	\bufnum, Pn(Prand([~pencil[1]],inf),inf),
+	\trigs, 0.001,
+	\amp, 20.1,
+	\rate, Pn(Pbrown(2.0,2.01)),
+	\samp_rand_rate, 100,
+	\samp_rand_range,1.0194,
+	\mouseXStart, 0,
+	\mouseXScale, 0,
+	\pan, Pn(Pseg([-1,-0.7,0,0,-1,0.1],[0.91,1.91,9,7,1],\sqr))
+	//\stretch, 10
+	//\delta,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+);
 )
 
 (
@@ -125,7 +159,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	\dur,1/20,
 	\bufnum, Pn(Prand([~pencil[5]],inf),inf),
 	\trigs, 0.001,
-	\amp, 3.1,
+	\amp, 0 .1,
 	\rate, 1.9,
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
@@ -177,7 +211,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	\bufnum, Pn(Prand([~pencil[5]],inf),inf),
 	\trigs, 0.001,
 	\amp, 7.2,
-	\rate, Pn(Pbrown(0.24,0.25)),
+	\rate, Pn(Pbrown(0.25,0.26)),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
 	\mouseXStart, Pn(Pseg([0.6,0.601],1000)),
@@ -191,7 +225,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 );
 
 (
- ~three = Pbindef(\6,
+ ~bo1 = Pbindef(\6,
 	\instrument,\gabor1,
 	\type, \note,
 	\sustain,Pseg([0.1,0.1],3,\cub,inf),
@@ -202,7 +236,7 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	\rate, Pn(Pbrown(0.54,0.55)),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
-	\mouseXStart, 0.6,
+	\mouseXStart, 0.601,
 	\mouseXScale,1,
 	\pan, Pn(Pbrown(0.07,1,0.01))
 	//\stretch, 10
@@ -211,19 +245,20 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\q, 0.01
 ).play;
 );
+~bo1.stop;
 (
- ~three = Pbindef(\7,
+ ~bo = Pbindef(\7,
 	\instrument,\gabor1,
 	\type, \note,
 	\sustain,Pseg([0.1,0.1],3,\cub,inf),
 	\dur,1/400,
 	\bufnum, Pn(Prand([~pencil[5]],inf),inf),
 	\trigs, 0.001,
-	\amp, 2.2,
+	\amp, 3.2,
 	\rate, Pn(Pbrown(0.53,0.55)),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
-	\mouseXStart, 0.6,
+	\mouseXStart, 0.601,
 	\mouseXScale,1,
 	\pan, Pn(Pbrown(-1,-0.7,0.01))
 	//\stretch, 10
@@ -232,15 +267,16 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\q, 0.01
 ).play;
 );
+~bo.stop;
 (
- ~three = Pbindef(\8,
+ ~eh = Pbindef(\8,
 	\instrument,\gabor1,
 	\type, \note,
 	\sustain,Pseg([0.14,0.14],3,\cub,inf),
 	\dur,Pn(Pwhite(1/11,1/26)),
 	\bufnum, Pn(Prand([~pencil[1]],inf),inf),
 	\trigs, 0.001,
-	\amp, 2.9,
+	\amp, Pn(Pbrown(0.01,0.5,0.01)),
 	\rate, Pn(Pwhite(1.0,1.1)),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
@@ -253,20 +289,43 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\q, 0.01
 ).play;
 );
-
+~eh.stop;
 (
- ~three = Pbindef(\9,
+ ~hm = Pbindef(\9,
 	\instrument,\gabor1,
 	\type, \note,
-	\sustain,Pseg([0.1,0.1],3,\cub,inf),
-	\dur,1/400,
+	\sustain,Pseg([0.099,0.099],3,\cub,inf),
+	\dur,1/200,
 	\bufnum, Pn(Prand([~pencil[5]],inf),inf),
 	\trigs, 0.001,
-	\amp, 8.2,
+	\amp, 14.2,
 	\rate, Pn(Pbrown(0.28,0.29)),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
 	\mouseXStart, Pn(Pseg([0.6,0.601],1000)),
+	\mouseXScale,1,
+	\pan, Pn(Pwhite(-0.9,1))
+	//\stretch, 10
+	//\delta,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+);
+~hm.stop;
+//0.669
+(
+ ~v = Pbindef(\11,
+	\instrument,\gabor1,
+	\type, \note,
+	\sustain,0.4*Pkey(\amp),
+	\dur,1/300,
+	\bufnum, Pn(Prand([~v0m[0]],inf),inf),
+	\trigs, 0.001,
+	\amp, Pn(Pseg([0.0001,0.05,1.0,0.001],[21,50,20],\exp)),
+	\rate, Pn(Pseg([1.48,1.9,1.9,2.1],[20,10,60])),
+	\samp_rand_rate, 100,
+	\samp_rand_range,1.001,
+	\mouseXStart, Pn(Pseg([0.1,0.661,0.675 ],[20,70],\lin)),
 	\mouseXScale,1,
 	\pan, Pn(Pwhite(-1,1))
 	//\stretch, 10
@@ -276,8 +335,12 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 ).play;
 );
 
+
+~v.stop;
+
+
 (
- ~three = Pbindef(\10,
+ ~hi = Pbindef(\10,
 	\instrument,\sin,
 	\type, \note,
 	\sustain,Pseg([0.1,0.1],3,\cub,inf),
@@ -298,6 +361,9 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	//\q, 0.01
 ).play;
 );
+
+
+~hi.stop;
 
 
 
