@@ -4,6 +4,7 @@
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
+	var siga;
 	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
 	var snd = FSinOsc.ar(freq);
 	var trig =  Blip.kr(trigs,1,80);
@@ -20,7 +21,8 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 	var env = EnvGen.ar(Env.sine(sustain,amp2),
 		doneAction:2);
 	//var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
-	var siga = HPF.ar(Pan2.ar(sig*env,pan),25);
+	siga = LPF.ar(siga,100);
+	siga = HPF.ar(Pan2.ar(sig*env,pan),25);
 	OffsetOut.ar(out, siga);
 },\ir!5).add;
 );
@@ -80,10 +82,18 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 	~v0m = ~v0m.add(Buffer.read(s,path.fullPath));
 })
 ));
+(
+~op= Array.new;
+~folder65 = PathName.new("/Users/jkilgore/Music/misc-samples/AudioInspo/OPN/");
+(
+~folder65.entries.do({
 
+	arg path;
+	~op = ~op.add(Buffer.read(s,path.fullPath));
+})
+));
 
-
-
+//**FLUTTER DORNE *** TOO HIGH GAIN
 (
  ~one = Pbindef(\1,
 	\instrument,\gabor1,
@@ -128,6 +138,102 @@ SynthDef(\sin,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, 
 ).play;
 );
 )
+////////////////////
+
+( //a gabor(approx. gaussian-shaped) grain
+SynthDef(\gaborop,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=2000, rate =1,
+	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
+	var siga;
+	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
+	var snd = FSinOsc.ar(freq);
+	var trig =  Blip.kr(trigs,1,80);
+	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
+		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
+		* BufFrames.kr(bufnum)*mouseXStart
+
+		/* *MouseX.kr(f.value,
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)*/
+	);
+	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
+	var env = EnvGen.ar(Env.sine(sustain,amp2),
+		doneAction:2);
+	//var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
+	siga = HPF.ar(Pan2.ar(sig*env,pan),25);
+	OffsetOut.ar(out, siga);
+},\ir!5).add;
+);
+
+///***********OPN BEAUTY
+(
+~op= Array.new;
+~folder65 = PathName.new("/Users/jkilgore/Music/misc-samples/AudioInspo/OPN/");
+(
+~folder65.entries.do({
+
+	arg path;
+	~op = ~op.add(Buffer.read(s,path.fullPath));
+})
+));
+(
+ ~one = Pbindef(\1,
+	\instrument,\gabor1,
+	\type, \note,
+	\sustain,Pseg([0.3,0.07,0.01,0.001,0.0001,0.4,0.4,0.1,0.3,0.001],[17,7,3,8.5,7,7,14,20],\exp,inf),
+	\dur,Pbrown(1/101,1/124.4,1/10.1),
+	\bufnum, Pn(Prand([~op[0]],inf),inf),
+	\trigs, 0.001,
+	\amp, 1.0,
+	\rate, Pn(Pbrown(1.0,1.01)),
+	\samp_rand_rate, 100,
+	\samp_rand_range,Pkey(\sustain)+1.001,
+	\mouseXStart, 0.61,
+	\mouseXScale, 0,
+	\pan, 0
+	//\stretch, 10
+	//\delta,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+);
+
+(
+~misc= Array.new;
+~folder65 = PathName.new("/Users/jkilgore/Music/misc-samples/bookReads/");
+(
+~folder65.entries.do({
+
+	arg path;
+	~misc = ~misc.add(Buffer.read(s,path.fullPath));
+})
+));
+
+(
+ ~one = Pbindef(\misc,
+	\instrument,\gabor1,
+	\type, \note,
+	\sustain,Pseg([0.3,0.07,0.01,0.001,0.0001,0.4,0.4,0.1,0.3,0.001],[17,7,3,8.5,7,7,14,20],\exp,inf),
+	\dur,Pbrown(1/101,1/124.4,1/10.1),
+	\bufnum, Pn(Prand([~misc[0]],inf),inf),
+	\trigs, 0.001,
+	\amp, 1.0,
+	\rate, Pn(Pbrown(1.0,1.01)),
+	\samp_rand_rate, 100,
+	\samp_rand_range,Pkey(\sustain)+1.001,
+	\mouseXStart, Pkey(\sustain)+0.5,
+	\mouseXScale, 0,
+	\pan, 0
+	//\stretch, 10
+	//\delta,
+	//\filterFreq, Pn(Pfunc({~test})),
+	//\q, 0.01
+).play;
+);
+
+
+//////////////////////////
+
 
 (
  ~two = Pbindef(\2,
