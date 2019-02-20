@@ -182,6 +182,20 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	OffsetOut.ar(out, Pan2.ar(siga,pan));
 },\ir!5).add;
 );
+
+
+
+
+(
+~chimes= Array.new;
+~folder739 = PathName.new("/Users/jkilgore/Music/misc-samples/wind_chimes");
+(
+~folder739.entries.do({
+	arg path;
+	~chimes = ~chimes.add(Buffer.read(s,path.fullPath));
+})
+));
+
 ( //a gabor(approx. gaussian-shaped) grain
 SynthDef(\gabor1_1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2000, rate =1,
 	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
@@ -203,22 +217,31 @@ SynthDef(\gabor1_1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs
 	siga = BPeakEQ.ar(siga, 1200, 0.3, -12.0);
 	siga = BPeakEQ.ar(siga, 1700, 0.3, -12.0);
 	siga = BPeakEQ.ar(siga, 3500, 0.3, -8.0);
+	siga = BPeakEQ.ar(siga, 130, 1.0, -60.0);
+	siga = BPeakEQ.ar(siga, 230, 0.4, -20.0);
 	siga = Compander.ar(siga, sig, 0.7, 1.0, 4.4, 0.002);
 	OffsetOut.ar(out, Pan2.ar(siga,pan));
 },\ir!5).add;
 );
 
-
-
 (
-~chimes= Array.new;
-~folder739 = PathName.new("/Users/jkilgore/Music/misc-samples/wind_chimes");
-(
-~folder739.entries.do({
-	arg path;
-	~chimes = ~chimes.add(Buffer.read(s,path.fullPath));
-})
-));
+ ~chimes3 = Pbindef(\chimes3,
+	\instrument,\gabor1_1,
+	\sustain,0.05,
+	\dur,1/520,
+	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 2.8,
+	\rate, 1.2,
+	\samp_rand_rate, 12,
+	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
+	\mouseXStart, 0.1,
+	\mouseXScale,0.01,
+	\pan, Pn(Pwhite(0.0,0.0))
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+);
 
 (
  ~chimes0 = Pbindef(\chimes0,
@@ -277,24 +300,7 @@ SynthDef(\gabor1_1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs
 ).play;
 );
 
-(
- ~chimes3 = Pbindef(\chimes3,
-	\instrument,\gabor1_1,
-	\sustain,0.05,
-	\dur,1/520,
-	\bufnum, Pn(Prand([~chimes[0]],inf),inf), //magnet5 experiments
-	\trigs, 0.001,
-	\amp, 0.8,
-	\rate, 1.2,
-	\samp_rand_rate, 12,
-	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
-	\mouseXStart, 0.1,
-	\mouseXScale,0.01,
-	\pan, Pn(Pwhite(0.1, 0.8))
-	//\filterFreq, Pn(Pbrown(40,80,1)),
-	//\q, 0.6
-).play;
-);
+
 
 (
  ~chimes4 = Pbindef(\chimes4,
@@ -423,7 +429,8 @@ SynthDef(\mgabor1_2,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trig
 })
 ));
 
-(
+
+/*
 (
  ~mchimes0 = Pbindef(\mchimes0,
 	\instrument,\mgabor1,
@@ -442,7 +449,34 @@ SynthDef(\mgabor1_2,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trig
 	//\q, 0.6
 ).play;
 );
-
+*/
+s.quit;
+( //a gabor(approx. gaussian-shaped) grain
+SynthDef(\mgabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2000, rate =1,
+	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
+	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
+	var snd = FSinOsc.ar(freq);
+	var trig =  Blip.kr(trigs,1,80);
+	var sig = PlayBuf.ar(1, bufnum, BufRateScale.kr(bufnum)*rate, trig,
+		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
+		*MouseX.kr(f.value,
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)
+	);
+	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
+	var env = EnvGen.ar(Env.sine(sustain,amp2),
+		doneAction:2);
+	var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
+	var siga = HPF.ar(Pan2.ar(sig*env,pan),25);
+	siga = BPeakEQ.ar(siga, 1200, 0.3, -12.0);
+	siga = BPeakEQ.ar(siga, 60, 1.3, -40.0);
+	siga = BPeakEQ.ar(siga, 379, 0.0001, -200.0);
+	siga = HPF.ar(siga,660);
+	siga = BPF.ar(siga,3600,1.0);
+	OffsetOut.ar(out, Pan2.ar(siga,pan));
+},\ir!5).add;
+);
 (
  ~mchimes1 = Pbindef(\mchimes1,
 	\instrument,\mgabor1,
@@ -450,13 +484,13 @@ SynthDef(\mgabor1_2,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trig
 	\dur,1/520,
 	\bufnum, Pn(Prand([~chimes[1]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
-	\amp, 0.3,
-	\rate, 1,
+	\amp, 2.3,
+	\rate, Pn(Pwhite(1.0,1.01)),
 	\samp_rand_rate, 12,
-	\samp_rand_range,1.001, //1.000000 - 1000  1.00001
-	\mouseXStart, 0.6,
+	\samp_rand_range,1.0003, //1.000000 - 1000  1.00001
+	\mouseXStart, 0.6, //0.6
 	\mouseXScale,0.01,
-	\pan, Pn(Pwhite(0.1, 0.8))
+	\pan, Pn(Pwhite(0.0, 0.0))
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
 ).play;
@@ -593,4 +627,3 @@ SynthDef(\mgabor1_2,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trig
 	//\q, 0.6
 ).play;
 );
-)
