@@ -4,7 +4,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
 	var snd = FSinOsc.ar(freq);
 	var trig =  Blip.kr(trigs,1,80);
-	var sig = PlayBuf.ar(1, bufnum, BufRateScale.kr(bufnum)*rate, trig,
+	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
 		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
 		*MouseX.kr(f.value,
 			((BufFrames.kr(bufnum)-f.value)
@@ -209,17 +209,68 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 )
 
 (
- ~three = Pbindef(\2,
+ ~two = Pbindef(\2,
 	\instrument,\gabor1,
-	\sustain,Pn(Pgeom(0.9,1.1,1)),
-	\dur,1/0.7,
+	\sustain,Pn(Pwhite(0.009,1.1)),
+	\dur, Pn(Pwhite(1/3,1/0.8)),
 	\bufnum, Pn(Prand([~opn[0],~chimes[0],~seth[5]],inf),inf), //magnet5 experiments
 	\trigs, 0.001,
 	\amp, 0.4,
-	\rate, Pn(Pwhite(1/Pgeom(0.6,1.0002,2),0.1),inf),
+	\rate, Pn(Pwhite(1/Pgeom(0.5,1.0002,1),0.1),inf),
 	\samp_rand_rate, 120,
 	\samp_rand_range,Pn(Pgeom(1.0, 1.0001, 100)), //1.000000 - 1000  1.00001
-	\mouseXStart, 0.516,
+	\mouseXStart, Pn(Pseg([0.1,1.0],[1])),
+	\mouseXScale,0 ,
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+)
+(
+ ~three = Pbindef(\3,
+	\instrument,\gabor1,
+	\sustain,Pn(Pgeom(0.02,0.1,1)),
+	\dur, Pn(Pwhite(1/8,1/0.7)),
+	\bufnum, Pn(Prand([~opn[0],~chimes[0],~seth[5]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.2,
+	\rate, Pn(Pwhite(1/Pgeom(1.0,1.0002,1),0.1),inf),
+	\samp_rand_rate, 120,
+	\samp_rand_range,Pn(Pgeom(1.0, 1.0001, 100)), //1.000000 - 1000  1.00001
+	\mouseXStart, Pn(Pseg([0.1,1.0],[1])),
+	\mouseXScale,0 ,
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+)
+(
+ ~four = Pbindef(\4,
+	\instrument,\gabor1,
+	\sustain,Pn(Pgeom(0.2,1.1,1)),
+	\dur, Pn(Pwhite(1/20,1/0.3)),
+	\bufnum, Pn(Prand([~opn[0],~chimes[0],~seth[5]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.6,
+	\rate, Pn(Pwhite(1/Pgeom(0.2,1.0002,1),0.1),inf),
+	\samp_rand_rate, 120,
+	\samp_rand_range,Pn(Pgeom(1.0, 1.0001, 100)), //1.000000 - 1000  1.00001
+	\mouseXStart, Pn(Pseg([0.1,1.0],[1])),
+	\mouseXScale,0 ,
+	//\filterFreq, Pn(Pbrown(40,80,1)),
+	//\q, 0.6
+).play;
+)
+(
+ ~five = Pbindef(\5,
+	\instrument,\gabor1,
+	\sustain,Pn(Pgeom(0.01,0.09,1)),
+	\dur, Pn(Pwhite(1/20,1/0.3)),
+	\bufnum, Pn(Prand([~opn[0],~chimes[0],~seth[5]],inf),inf), //magnet5 experiments
+	\trigs, 0.001,
+	\amp, 0.4,
+	\rate, Pn(Pwhite(1/Pgeom(0.2,1.0002,1),0.1),inf),
+	\samp_rand_rate, 120,
+	\samp_rand_range,Pn(Pgeom(1.0, 1.0001, 100)), //1.000000 - 1000  1.00001
+	\mouseXStart, Pn(Pseg([0.1,1.0],[1])),
 	\mouseXScale,0 ,
 	//\filterFreq, Pn(Pbrown(40,80,1)),
 	//\q, 0.6
@@ -330,18 +381,82 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 (
  ~bass = Pbindef(\1,
 	\instrument,\gabor1,
-	\sustain,Pn(Pwhite(0.7,0.8)),
+	\sustain,Pn(Pwhite(0.4,0.5)),
 	\dur,1/220,
-	\bufnum, Pn(Prand([~opn[0],~chimes[0],~mag[3]],inf),inf), //magnet5 experiments
+	\bufnum, Pn(Prand([~opn[0]],inf),inf), //magnet5 experiments,~chimes[0],~mag[3]
 	\trigs, 0.001,
 	\amp, 0.6,
-	\rate, Pn(Pgeom(0.6,1.0002,6)),
+	\rate, Pn(Pgeom(0.6,1.0002,1)),
 	\samp_rand_rate, 120,
 	\samp_rand_range,Pn(Pgeom(1.0, 1.00001, 10)), //1.000000 - 1000  1.00001
-	\mouseXStart, 0.216,
-	\mouseXScale,0.1 ,
+	\mouseXStart, 0.246, //.216
+	\mouseXScale,0.2 ,
 	\filterFreq, Pn(Pbrown(40,70,1)),
-	\q, 0.5
+	\q, 0.7
 ).play;
 )
 )
+
+( //a gabor(approx. gaussian-shaped) grain
+SynthDef(\gabor2,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum,bufnum2 trigs=2000, rate =1,
+	samp_rand_rate = 1, samp_rand_range = 2, mouseXScale = 1, mouseXStart = 0, filterFreq=440,q = 1.0|
+	var f = {(mouseXStart)*(BufFrames.kr(bufnum))};
+	var snd = FSinOsc.ar(freq);
+	var trig =  Blip.kr(trigs,1,80);
+	var sigb =
+	PlayBuf.ar(2, bufnum2, BufRateScale.kr(bufnum)*rate*2.1, trig,
+		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
+		* BufFrames.kr(bufnum)*mouseXStart
+
+		/* *MouseX.kr(f.value,
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)*/
+	);
+	var sig = PlayBuf.ar(2, bufnum, BufRateScale.kr(bufnum)*rate, trig,
+		LFNoise1.kr(samp_rand_rate).range(1,samp_rand_range)
+		*MouseX.kr(f.value,
+			((BufFrames.kr(bufnum)-f.value)
+				*mouseXScale)
+			+ f.value)*sigb
+	);
+
+
+	var amp2 = amp*AmpComp.ir(freq.max(50))*0.5;
+	var env = EnvGen.ar(Env.sine(sustain,amp2),
+		doneAction:2);
+	var sigf = BPF.ar(HPF.ar(Pan2.ar(sig*env,pan),25),filterFreq,q);
+	var siga = HPF.ar(Pan2.ar(sig*env,pan),25);
+	//sigf = sigf;
+	OffsetOut.ar(out, sigf.clip2(2));
+},\ir!5).add;
+);
+s.quit;
+(
+ ~bass1 = Pbindef(\2,
+	\instrument,\gabor2,
+	\sustain,Pn(Pwhite(0.2,0.25)),
+	\dur,1/220,
+	\bufnum, Pn(Prand([~opn[0]],inf),inf), //magnet5 experiments,~chimes[0],~mag[3]
+	\bunum2, Pn(Prand([~opn[0],~chimes[0],~mag[0]],inf),inf),
+	\trigs, 0.001,
+	\amp, 0.6,
+	\rate, Pn(Pgeom(0.6,1.0002,1)),
+	\samp_rand_rate, 120,
+	\samp_rand_range,Pn(Pgeom(1.0, 1.00001, 10)), //1.000000 - 1000  1.00001
+	\mouseXStart, 0.246, //.216
+	\mouseXScale, 0.3,
+	\filterFreq, Pn(Pbrown(40,70,1)),
+	\q, 10
+).play;
+)
+
+(
+~i3_2= Array.new;
+~folder6 = PathName.new("/Users/jkilgore/Music/misc-samples/3_02_19-MiscSamples/");
+(
+~folder6.entries.do({
+	arg path;
+	~i3_2 = ~i3_2.add(Buffer.read(s,path.fullPath));
+})
+));

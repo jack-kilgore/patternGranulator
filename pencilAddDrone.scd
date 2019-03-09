@@ -234,7 +234,7 @@ SynthDef(\gaborop,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=20
 	\dur,1/20,
 	\bufnum, Pn(Prand([~pencil[5]],inf),inf),
 	\trigs, 0.001,
-	\amp, 0 .1,
+	\amp, 0.1,
 	\rate, 1.9,
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
