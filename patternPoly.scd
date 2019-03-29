@@ -303,7 +303,7 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan=0, bufnum, trigs=2
 	\instrument,\gabor1,
 	\sustain,Pwhite(0.002,0.4),
 	\dur,1/0.8,
-	\bufnum, Pn(Prand([~mag[1]],inf),inf), //magnet5 experiments
+	\bufnum, Pn(Prand([~mag[1]],inf),;inf), //magnet5 experiments
 	\trigs, 0.001,
 	\amp, 3.3,
 	\rate, Pn(Pgeom(0.2,1.002,18)),

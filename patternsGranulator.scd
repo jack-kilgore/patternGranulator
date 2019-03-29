@@ -395,19 +395,29 @@ SynthDef(\gabor1,{|out, amp=0.01, freq=440, sustain=0.01, pan, bufnum, trigs=200
 ))
 
 (
+~devil= Array.new;
+~folder79 = PathName.new("/Users/jkilgore/Music/misc-samples/DevilDam-ForrestMichael/");
+(
+~folder79.entries.do({
+	arg path;
+	~devil = ~devil.add(Buffer.read(s,path.fullPath));
+})
+));
+
+(
  ~one = Pbindef(\1,
 	\instrument,\gabor1,
 	\type, \note,
 	\sustain,Pseg([0.04,0.1],20,\step,inf),
 	\dur,1/100,
-	\bufnum, Pn(Prand([~chimes[0]],inf),inf),
+	\bufnum, Pn(Prand([~devil[2]],inf),inf),
 	\trigs, 0.001,
 	\amp, 1.1,
 	\rate, Pseg([0.7,1.9],10000,'exp',inf),
 	\samp_rand_rate, 100,
 	\samp_rand_range,1.001,
-	\mouseXStart, 0.4,
-	\mouseXScale, 0.01,
+	\mouseXStart, 0,
+	\mouseXScale, 1,
 	//\stretch, 10
 	//\delta,
 	//\filterFreq, Pn(Pfunc({~test})),
